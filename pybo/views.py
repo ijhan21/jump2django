@@ -4,27 +4,32 @@ from .models import Question
 from django.views import generic
 from django.utils import timezone
 from .forms import QuestionForm, AnswerForm
+from django.core.paginator import Paginator
 # Create your views here.
 def index(request):
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
+    page = request.GET.get('page', '1')
     question_list = Question.objects.order_by('-create_date') # 앞에 - 때문에 역순 정렬
-    context = {'question_list':question_list}
+    paginator = Paginator(question_list, 10)
+    page_obj = paginator.get_page(page)
+    # context = {'question_list':question_list}
+    context = {'question_list':page_obj}
     # return HttpResponse("hello")
     return render(request, 'pybo/question_list.html', context)
 
-def detail(request, question_id):
+def detail(request, pk):
     # question = Question.objects.get(id=question_id)
-    question = get_object_or_404(Question, pk=question_id)
+    question = get_object_or_404(Question, pk=pk)
     context = {'question':question}
     return render(request, 'pybo/question_detail.html', context)
-
+"""
 class IndexView(generic.ListView):
     def get_queryset(self):
         return Question.objects.order_by('-create_date')
 
 class DetailView(generic.DetailView):
     model = Question
-
+"""
 def answer_create(request, pk):
     question = get_object_or_404(Question, pk=pk)
     if request.method == 'POST':
