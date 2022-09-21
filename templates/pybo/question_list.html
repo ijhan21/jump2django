@@ -4,9 +4,10 @@
 <div class="container my-3">
     <table class="table">
 <thead>
-    <tr class="table-primary">
-        <th>번호</th>
-        <th>제목</th>
+    <tr class="text-center table-primary">
+        <th>번호</th>        
+        <th style="width:50%">제목</th>
+        <th>글쓴이</th>
         <th>작성일시</th>
     </tr>
 </thead>
@@ -15,8 +16,8 @@
     {% for question in question_list%}
     <tr class="card-body">
         <!-- <td>{{question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1}}</td> -->
-        <td>{{question_list.start_index|add:forloop.counter0}}</td>
-        <td>
+        <td >{{question_list.start_index|add:forloop.counter0}}</td>
+        <td class="text-left">
             <a href="{% url 'pybo:detail' question.id%}">
                 {{question.subject}}
             </a>
@@ -24,6 +25,7 @@
             <span class="text-danger small ml-2">{{question.answer_set.count}}</span>
             {%endif%}
         </td>
+        <td class="text-center">{{question.author.username}}</td>
         <td>{{question.create_date}}</td>
     </tr>
     {%endfor%}

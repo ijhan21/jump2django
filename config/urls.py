@@ -16,11 +16,16 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from pybo import urls
+from pybo import urls, views
+from django.contrib.auth import views as auth_views
 
 app_name = 'main'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pybo/', include('pybo.urls')),
+    path('common/', include('common.urls')),
+    path('', views.index, name='index'),    
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='common/login.html'), name='login'),
+
 ]
