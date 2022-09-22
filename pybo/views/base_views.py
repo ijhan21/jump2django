@@ -7,12 +7,28 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Count
 # Create your views here.
 def index(request):
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
     page = request.GET.get('page', '1')
     kw = request.GET.get('kw','')
+    so = request.GET.get('so','recent')
+
+    #정렬
+    """
+    if so == 'recommend':
+        question_list=Question.objects.annotate(
+            num_voter=Count('voter')
+        ).order_by('-num_voter','-create_date')
+    elif so == 'popular':
+        question_list=Question.objects.annotate(
+            num_voter=Count('answer')
+        ).order_by('-num_answer','-create_date')
+    else:
+        question_list= Question.objects.order_by('-create_date')
+    """
+
     question_list = Question.objects.order_by('-create_date') # 앞에 - 때문에 역순 정렬
     if kw:
         question_list = question_list.filter(
