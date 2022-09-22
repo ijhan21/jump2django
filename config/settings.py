@@ -77,18 +77,27 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'djongo',
+#             'NAME': 'mongoDev', # DB명. 기존에 없으면 자동으로 생성됨
+#             'ENFORCE_SCHEMA': False,
+#             'CLIENT': {
+#                 'host': 'mongodb://hans:1234@192.168.0.44:27017'
+#                 #'host': 'mongodb://<아이디>:<비번>@<호스트주소>:<포트번호>'
+#             }  
+#         }
+# }
 DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'mongoDev', # DB명. 기존에 없으면 자동으로 생성됨
-            'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': 'mongodb://hans:1234@192.168.0.44:27017'
-                #'host': 'mongodb://<아이디>:<비번>@<호스트주소>:<포트번호>'
-            }  
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # mysqlclient librarly 설치
+        'NAME': 'myboard',
+        'USER': 'root',
+        'PASSWORD': 'root', # mariaDB 설치 시 입력한 root 비밀번호 입력
+        'HOST': '192.168.0.44',
+        'PORT': '3306'
+    }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
