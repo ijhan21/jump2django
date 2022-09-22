@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, resolve_url
 from django.http import HttpResponse
 from ..models import Question, Answer, Comment
 from ..forms import QuestionForm, AnswerForm, CommentForm
@@ -20,7 +20,11 @@ def answer_create(request, pk):
             answer.create_date = timezone.now()
             answer.question = question
             answer.save()
-            return redirect("pybo:detail", pk=pk)
+            # return redirect("pybo:detail", pk=pk)
+            return redirect('{}#answer_{}'.format(resolve_url(
+                'pybo:detail', pk=answer.question.id
+            )
+            , answer.id))
     else:
         form = AnswerForm()
     context = {'question':question, 'form':form}    
@@ -41,7 +45,11 @@ def answer_modify(request, answer_id):
             answer.author = request.user
             answer.modify_date = timezone.now()
             answer.save()
-            return redirect('pybo:detail', pk=answer.question.id)
+            # return redirect('pybo:detail', pk=answer.question.id)
+            return redirect('{}#answer_{}'.format(resolve_url(
+                'pybo:detail', pk=answer.question.id
+            )
+            , answer.id))
     else:
         form = QuestionForm(instance=answer)
     context = {'answer':answer, 'form': form}

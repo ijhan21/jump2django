@@ -7,15 +7,24 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 # Create your views here.
 def index(request):
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
     page = request.GET.get('page', '1')
+    kw = request.GET.get('kw','')
     question_list = Question.objects.order_by('-create_date') # 앞에 - 때문에 역순 정렬
+    if kw:
+        question_list = question_list.filter(
+            Q(subject__icontains=kw) |
+            Q(content__icontains=kw) |
+            Q(author__username__icontains=kw) |
+            Q(answer__author__username__icontains=kw)
+        )#.distinct() #distinct 안해도 중복 안됨!!!
     paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
     # context = {'question_list':question_list}
-    context = {'question_list':page_obj}
+    context = {'question_list':page_obj, 'page':page, 'kw': kw}
     # return HttpResponse("hello")
     return render(request, 'pybo/question_list.html', context)
 
